@@ -17,15 +17,19 @@ await app.RunAsync();
 public sealed class CounterGrain(
     [PersistentState("count")] IPersistentState<int> count) : ICounterGrain
 {
+  private int state = 0;
+
   public ValueTask<int> Get()
   {
-    return ValueTask.FromResult(count.State);
+    return ValueTask.FromResult(state);
+    // return ValueTask.FromResult(count.State);
   }
 
   public async ValueTask<int> Increment()
   {
-    var result = ++count.State;
-    await count.WriteStateAsync();
-    return result;
+    // var result = ++count.State;
+    //    await count.WriteStateAsync()
+    state++;
+    return await ValueTask.FromResult(state);
   }
 }
