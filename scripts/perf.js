@@ -7,13 +7,17 @@ export const options = {
   duration: "1m",
 };
 
+const env = "docker";
+const baseUrl =
+  env === "docker" ? "http://localhost:8080" : "http://localhost:5025";
+
 export default function () {
   // Generate a random counter ID between 1 and 1000
   const counterId = randomIntBetween(1, 1000);
-  const baseUrl = "http://localhost:5025/counter";
+  const counterUrl = `${baseUrl}/counter`;
 
   // POST to increment the counter
-  const postUrl = `${baseUrl}/${counterId}`;
+  const postUrl = `${counterUrl}/${counterId}`;
   const postResponse = http.post(postUrl);
 
   check(postResponse, {
@@ -25,7 +29,7 @@ export default function () {
   //  sleep(0.1);
 
   // GET to retrieve the counter value
-  const getUrl = `${baseUrl}/${counterId}`;
+  const getUrl = `${counterUrl}/${counterId}`;
   const getResponse = http.get(getUrl);
 
   check(getResponse, {

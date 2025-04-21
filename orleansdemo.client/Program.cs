@@ -20,6 +20,8 @@ app.MapPost("/counter/{grainId}", async (IClusterClient client, string grainId) 
   return await grain.Increment();
 });
 
+app.MapGet("/ping", () => "OK");
+
 app.UseFileServer();
 
 await app.RunAsync();

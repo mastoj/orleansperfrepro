@@ -19,13 +19,13 @@ var orleans = builder.AddOrleans("default")
 builder.AddProject<Projects.orleansdemo_server>("silo")
        .WithReference(orleans)
        .WaitFor(storage)
-       .WithReplicas(3);
+       .WithReplicas(1);
 
 builder.AddProject<Projects.orleansdemo_client>("client")
        .WithReference(orleans.AsClient())
        .WithExternalHttpEndpoints()
        .WaitFor(storage)
-       .WithReplicas(3);
+       .WithReplicas(1);
 
 builder.Build().Run();
 

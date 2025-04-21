@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Azurite for local Azure Storage emulation
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000"  # Blob service
+      - "10001:10001"  # Queue service
+      - "10002:10002"  # Table service
+    volumes:
+      - azurite-data:/data
+    networks:
+      - orleans-network
+
+  # Orleans Server
+  orleans-server:
+    image: orleansdemo/server:test
+    depends_on:
+      - azurite
+    ports:
+      - "11111:11111"  # Silo port (default)
+      - "30000:30000"  # Gateway port (default)
+      - "80:80"        # HTTP
+      - "443:443"      # HTTPS
+    environment:
+      - Orleans__ClusterId=k177cdcmxf07skvdyq7xtmnxy
+      - Orleans__Clustering__ProviderType=AzureTableStorage
+      - Orleans__Clustering__ServiceKey=clustering
+      - Orleans__ServiceId=jv37q5hyt17bkf7dvhuqmp7p2
+      - ConnectionStrings__clustering=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;TableEndpoint=http://azurite:10002/devstoreaccount1;
+      - ConnectionStrings__grain-state=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      - Orleans__Endpoints__GatewayPort=30000
+      - Orleans__Endpoints__SiloPort=11111
+      - Orleans__GrainStorage__Default__ProviderType=AzureBlobStorage
+      - Orleans__GrainStorage__Default__ServiceKey=grain-state
+    networks:
+      - orleans-network
+
+  # Orleans Client
+  orleans-client:
+    image: orleansdemo/client:test
+    depends_on:
+      - orleans-server
+    ports:
+      - "8080:80"    # HTTP
+      - "8443:443"   # HTTPS
+    environment:
+      - Orleans__ClusterId=k177cdcmxf07skvdyq7xtmnxy
+      - Orleans__Clustering__ProviderType=AzureTableStorage
+      - Orleans__Clustering__ServiceKey=clustering
+      - Orleans__ServiceId=jv37q5hyt17bkf7dvhuqmp7p2
+      - ConnectionStrings__clustering=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;TableEndpoint=http://azurite:10002/devstoreaccount1;
+      - ASPNETCORE_URLS=http://*:80
+    networks:
+      - orleans-network
+
+networks:
+  orleans-network:
+    driver: bridge
+
+volumes:
+  azurite-data:

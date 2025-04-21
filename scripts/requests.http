@@ -1,5 +1,13 @@
-### Increase counter for user 'tomas'
+# Local Development Environment Requests
+### Increase counter for user 'tomas' (local)
 POST http://localhost:5025/counter/tomas
 
-### Get counter user 'tomas'
+### Get counter user 'tomas' (local)
 GET http://localhost:5025/counter/tomas
+
+# Docker Container Requests
+### Increase counter for user 'tomas' (Docker)
+POST http://localhost:8080/counter/tomas
+
+### Get counter user 'tomas' (Docker)
+GET http://localhost:8080/counter/tomas
