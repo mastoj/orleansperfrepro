@@ -7,7 +7,7 @@ export const options = {
   duration: "1m",
 };
 
-const env = "docker";
+const env = __ENV.TEST_ENV == "docker" ? "docker" : "local";
 const baseUrl =
   env === "docker" ? "http://localhost:8080" : "http://localhost:5025";
 
