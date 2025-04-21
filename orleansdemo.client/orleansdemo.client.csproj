@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\orleansdemo.ServiceDefaults\orleansdemo.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\orleansdemo.graininterfaces\orleansdemo.graininterfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Azure.Data.Tables" Version="9.2.0" />
+    <PackageReference Include="Aspire.Azure.Storage.Blobs" Version="9.2.0" />
+    <PackageReference Include="Microsoft.Orleans.Client" Version="9.1.2" />
+    <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="9.1.2" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="9.1.2" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

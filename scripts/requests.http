@@ -1,0 +1,5 @@
+### Increase counter for user 'tomas'
+POST http://localhost:5025/counter/tomas
+
+### Get counter user 'tomas'
+GET http://localhost:5025/counter/tomas
